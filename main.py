@@ -9,20 +9,19 @@ front_page = '''
 Instituto Tecnológico de Costa Rica
 Ingeniería en Computación
 Compiladores e intérpretes
-Isaac Herrera Monge
 Mauro Navarro Obando
 
-Bienvenid@ al scanner de Notch Engine'''
+Compilador para archivos Notch Engine [.ne]'''
 
 
 cli_banner = '''
 Presiona:
-    1. Para iniciarliza el scanner
+    1. Para inicializar el scanner
     2. Para finalizar el scanning
     3. Para recibir el siguiente token DemeToken()
     4. Para aceptar el token TomeToke()
     5. Escanear todo el archivo
-    6. Parsing process
+    6. Iniciar Parseo
 '''
 
 def main():

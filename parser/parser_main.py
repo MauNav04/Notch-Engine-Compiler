@@ -129,6 +129,37 @@ class parser:
                                 self.Stack.pop()
                                 if self.Stack.size() == 0:
                                     print("\n ! The input has been parsed succesfully !")
+                            
+                            # Marks the beggining of a Constant section        
+                            case "#const1":
+                                self.GlobalSymbolTable.inConstSect = True
+                                print("[CTXT]: inConstSect = True \n")
+                                self.Stack.pop()
+                            
+                            # Marks the end of a constant section
+                            case "#const2":
+                                if self.GlobalSymbolTable.inConstSect == True:
+                                    self.GlobalSymbolTable.inConstSect = False
+                                    print("[CTXT]: inConstSect = False \n")
+                                    self.Stack.pop()
+                                else:
+                                    print("[CTXT]: A ConstSection wasn't closed properly \n")
+                              
+                            # Loads a symbol to the table if requirements are fullfilled        
+                            case "#const3":
+                                if self.GlobalSymbolTable.inConstSect == True:
+                                    self.GlobalSymbolTable.insert(currentBElement, "C")
+                                    print("[CTXT]: Constant Inserted In the ST \n")
+                                    self.GlobalSymbolTable.display()
+                                    self.Stack.pop()
+                                else:
+                                    print("[ERROR]: Constant declared outside of a constant section \n")
+                            
+                            # References the type in a temporary variable so that it can be loaded later 
+                            case "#type1":
+                                self.GlobalSymbolTable.typeTemp = currentBElement
+                                self.Stack.pop()
+                                    
                             case _: # basically this is default
                                 print("Other")
                 else:

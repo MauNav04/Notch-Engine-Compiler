@@ -4,7 +4,21 @@ class SymbolTable:
         
         #Creacion de Flags y pilas para manejar las dinamicas de reconocimiento de contexto
         self.inFunction = False
-
+        self.inVarSect = False
+        self.inConstSect = False
+        self.inProtoSect = False
+        self.inRoutSect = False
+        
+        self.typeTemp = None
+        self.currSymbol = None
+        
+        #Type codifications
+        self.generalData = {"name":None, "category":None}
+        self.constOrVar = {"type":None,"val":None}
+        
+    def insert(self, lexema, category):
+        self._table[lexema] = {"name":lexema, "category":category}
+        
     def contains(self, key):
         return key in self._table
 
