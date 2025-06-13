@@ -20,6 +20,8 @@ class SymbolTable:
         match category:
             case 'C':
                 self._table[lexema] = {"name":lexema, "category":category, "type":None, "value":None}
+            case 'V':
+                self._table[lexema] = {"name":lexema, "category":category, "type":None, "value":None}
             case _:
                 print("\n [WARNING]: Category NOT recognized \n")
             

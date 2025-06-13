@@ -9,17 +9,23 @@ front_page = '''
 Instituto Tecnológico de Costa Rica
 Ingeniería en Computación
 Compiladores e intérpretes
+Semestre I 2025
+Etapa 4
+Autor: 
 Mauro Navarro Obando
 
-Compilador para archivos Notch Engine [.ne]'''
+==============================================
+Compilador para archivos Notch Engine [.ne]
+==============================================
+'''
 
 
 cli_banner = '''
-Presiona:
+Comandos:
     1. Para inicializar el scanner
-    2. Para finalizar el scanning
+    2. Para finalizar el compilador
     3. Para recibir el siguiente token DemeToken()
-    4. Para aceptar el token TomeToke()
+    4. Para aceptar el token TomeToken()
     5. Escanear todo el archivo
     6. Iniciar Parseo
 '''
@@ -42,7 +48,7 @@ def main():
                 newScanner.InicializarScanner()             # In this function we check if the path is valid and it loads it
 
             case "2":
-                print("Finalizando el scanning...")
+                print("Finalizando el compilador...")
                 newScanner.FinalizarScanner()
             case "3":
                 print("El token actual es: " + newScanner.DemeToken().get('familia') )
@@ -63,7 +69,9 @@ def main():
                     newScanner.TomeToken()
 
                 print(newScanner.result)
-                newScanner.FinalizarScanner()
+                newScanner.getStats()
+                newScanner.WallOfBricks()
+                #newScanner.FinalizarScanner()
             
             case "6":
                 

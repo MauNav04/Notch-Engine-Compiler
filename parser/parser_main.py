@@ -147,7 +147,7 @@ class parser:
                                 else:
                                     print("[CTXT]: A ConstSection wasn't closed properly \n")
                               
-                            # Loads a symbol to the table if requirements are fullfilled        
+                            # Loads a constant to the table if requirements are fullfilled        
                             case "#const3":
                                 if self.GlobalSymbolTable.inConstSect == True:
                                     self.GlobalSymbolTable.insert(currentBElement.get("lexema"), "C")
@@ -163,6 +163,33 @@ class parser:
                                 if self.GlobalSymbolTable.inConstSect == True:
                                     self.GlobalSymbolTable.directModify("value", currentBElement.get("lexema"))
                                     print(f"[CTXT]: Constant \"{self.GlobalSymbolTable.currIdentifier}\" Modified In the ST \n")
+                                    self.GlobalSymbolTable.display()
+                                    self.Stack.pop()
+                                else:
+                                    print("[ERROR]: Constant declared outside of a constant section \n")
+                            
+                            # Marks the beggining of a Variable section        
+                            case "#var1":
+                                self.GlobalSymbolTable.inVarSect = True
+                                print("[CTXT]: inVarSect = True \n")
+                                self.Stack.pop()
+                            
+                            # Marks the end of a Variable section
+                            case "#var2":
+                                if self.GlobalSymbolTable.inVarSect == True:
+                                    self.GlobalSymbolTable.inVarSect = False
+                                    print("[CTXT]: inVarSect = False \n")
+                                    self.Stack.pop()
+                                else:
+                                    print("[CTXT]: A VarSection wasn't closed properly \n")
+                            
+                            # Loads a variable into the table if requirements are fullfilled        
+                            case "#var3":
+                                if self.GlobalSymbolTable.inVarSect == True:
+                                    self.GlobalSymbolTable.insert(currentBElement.get("lexema"), "V")
+                                    self.GlobalSymbolTable.currIdentifier = currentBElement.get("lexema")
+                                    print(f"[CTXT]: Variable \"{self.GlobalSymbolTable.currIdentifier}\" Inserted In the ST \n")
+                                    self.GlobalSymbolTable.directModify("type", self.GlobalSymbolTable.typeTemp)
                                     self.GlobalSymbolTable.display()
                                     self.Stack.pop()
                                 else:

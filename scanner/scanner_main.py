@@ -1,6 +1,8 @@
-from scanner import tokens  # Here we import the tokens
+from scanner import tokens
 import hashlib
+import sys
 
+# Scanner developed by: Isaac Mauricio Herrera Monge | Git: https://github.com/Isaacoun100
 
 # Scanner version 1.1
 # Changelog: The previous scanner didn't quite follow the structure to implement
@@ -56,10 +58,7 @@ class scanner:
 
     # Here we close the scanning process and show the stats
     def FinalizarScanner(self):
-        # Prints the results of the scanning process
-        self.getStats()
-        # We summon the all mighty ¡WALL OF BRICKS!
-        self.WallOfBricks()
+        sys.exit()
 
     # DemeToken() will return the current token that its beeing analized
     def DemeToken(self):

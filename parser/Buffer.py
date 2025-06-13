@@ -34,7 +34,6 @@ class Buffer:
         if self.buffer:
             return self.buffer[self.index]
         return None
-    
 
     def flush(self):
         self.buffer = []
