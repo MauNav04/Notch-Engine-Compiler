@@ -56,5 +56,8 @@ class Buffer:
         self.currentLoad += 1 
     
     def __str__(self):
-        display = [f"[{val}]" if i == self.index else val for i, val in enumerate(self.buffer)]
+        display = [
+            f"[{token['familia']}]" if i == self.index else token['familia']
+            for i, token in enumerate(self.buffer)
+        ]
         return "Buffer: " + " | ".join(display)

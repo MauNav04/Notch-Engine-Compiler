@@ -13,10 +13,12 @@ class parser:
 
         tokenList = []
         for item in result:
-            tokenList.append(item.get('familia'))
+            tokenList.append(item)
 
-        # Previously known as userInput, moved to the constructor
+        # The token list attribute, contains all the tokens as dictionaries, each token contains family,lexema,ln#,startCol#,endCol#
         self.tokenList = tokenList
+        
+        print(f"\n RESULT: {result} \n")
         
         self.ParsingTable = ParsingTable()
         self.pTable = self.ParsingTable.getTable()
@@ -69,13 +71,13 @@ class parser:
                 # properly written and it is in the Terminals list, exceptions must be handeled properly
                 
                 print(f"pRule row: {self.pTable[currentStackElement]}")
-                index = self.terminals.index(currentBElement)
+                index = self.terminals.index(currentBElement.get("familia"))
                 parsingRuleIndex = self.pTable[currentStackElement][index]
                 print(f"pRule index: {parsingRuleIndex}")
                 
                 if parsingRuleIndex < 1: 
                     #ERROR case if there is no rule after reading a non terminal
-                    print(f"Syntax Error: {currentBElement} is not supposed to be after {self.Stack.peekPopped()}")
+                    print(f"Syntax Error: {currentBElement.get("familia")} is not supposed to be after {self.Stack.peekPopped()}")
                     break
                 else:
                     parsingRule = self.rules[parsingRuleIndex]
@@ -148,8 +150,19 @@ class parser:
                             # Loads a symbol to the table if requirements are fullfilled        
                             case "#const3":
                                 if self.GlobalSymbolTable.inConstSect == True:
-                                    self.GlobalSymbolTable.insert(currentBElement, "C")
-                                    print("[CTXT]: Constant Inserted In the ST \n")
+                                    self.GlobalSymbolTable.insert(currentBElement.get("lexema"), "C")
+                                    self.GlobalSymbolTable.currIdentifier = currentBElement.get("lexema")
+                                    print(f"[CTXT]: Constant \"{self.GlobalSymbolTable.currIdentifier}\" Inserted In the ST \n")
+                                    self.GlobalSymbolTable.directModify("type", self.GlobalSymbolTable.typeTemp)
+                                    self.GlobalSymbolTable.display()
+                                    self.Stack.pop()
+                                else:
+                                    print("[ERROR]: Constant declared outside of a constant section \n")
+                                    
+                            case "#const4":
+                                if self.GlobalSymbolTable.inConstSect == True:
+                                    self.GlobalSymbolTable.directModify("value", currentBElement.get("lexema"))
+                                    print(f"[CTXT]: Constant \"{self.GlobalSymbolTable.currIdentifier}\" Modified In the ST \n")
                                     self.GlobalSymbolTable.display()
                                     self.Stack.pop()
                                 else:
@@ -157,14 +170,14 @@ class parser:
                             
                             # References the type in a temporary variable so that it can be loaded later 
                             case "#type1":
-                                self.GlobalSymbolTable.typeTemp = currentBElement
+                                self.GlobalSymbolTable.typeTemp = currentBElement.get("familia")
                                 self.Stack.pop()
                                     
                             case _: # basically this is default
-                                print("Other")
+                                print("\n [WARNING]: Semantic Symbol NOT recognized \n")
                 else:
                     #if top of the stack contains a terminal, compare with the first element in the buffer
-                    if currentBElement == currentStackElement:
+                    if currentBElement.get("familia") == currentStackElement:
                         print("Match found!")
                         print(self.Buffer)
                         buffNext = self.Buffer.next()
@@ -179,7 +192,7 @@ class parser:
                             print("\n ! The input has been parsed succesfully !")
                     else:                    
                         #ERROR case if there is no rule after reading a terminal
-                        print(f"Syntax Error: {currentBElement} is not supposed to be after {self.Stack.peekPopped()}")
+                        print(f"Syntax Error: {currentBElement.get("familia")} is not supposed to be after {self.Stack.peekPopped()}")
                         break
                     
             currentStackElement = self.Stack.peek()

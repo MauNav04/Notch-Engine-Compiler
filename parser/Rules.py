@@ -9,7 +9,7 @@ class Rules:
             4: [],
             5: ['<constante>', '<constantes>'],
             6: [],
-            7: ['OBSIDIAN','#type1', '<tipo>', '#const3', '<id>', '<literal>'],
+            7: ['OBSIDIAN','#type1', '<tipo>', '#const3', '<id>', '#const4','<literal>'],
             8: ['RESOURCEPACK', '<tipos>'],
             9: [],
             10: ['ANVIL', '<id>', 'ARROW', '<tipo>', 'SEMICOLON', '<tipos>'],

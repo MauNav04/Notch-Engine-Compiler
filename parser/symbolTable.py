@@ -10,14 +10,19 @@ class SymbolTable:
         self.inRoutSect = False
         
         self.typeTemp = None
-        self.currSymbol = None
+        self.currIdentifier = None
         
         #Type codifications
         self.generalData = {"name":None, "category":None}
         self.constOrVar = {"type":None,"val":None}
         
     def insert(self, lexema, category):
-        self._table[lexema] = {"name":lexema, "category":category}
+        match category:
+            case 'C':
+                self._table[lexema] = {"name":lexema, "category":category, "type":None, "value":None}
+            case _:
+                print("\n [WARNING]: Category NOT recognized \n")
+            
         
     def contains(self, key):
         return key in self._table
@@ -25,8 +30,11 @@ class SymbolTable:
     def getData(self, key):
         return self._table.get(key, None)
 
-    def modify(self, key, value):
-        self._table[key] = value
+    def modify(self, key, attribute, value):
+        self._table[key][attribute] = value
+        
+    def directModify(self, attribute, value):
+        self._table[self.currIdentifier][attribute] = value
 
     def destroyTb(self):
         self._table.clear()
