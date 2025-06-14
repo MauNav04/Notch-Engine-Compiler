@@ -71,7 +71,6 @@ def main():
                 print(newScanner.result)
                 newScanner.getStats()
                 newScanner.WallOfBricks()
-                #newScanner.FinalizarScanner()
             
             case "6":
                 
@@ -79,7 +78,6 @@ def main():
 
             case _:
                 print("Opción no válida. Por favor, ingrese una opción válida.")
-                # Aquí se maneja la opción no válida
 
 if __name__ == "__main__":
     main()

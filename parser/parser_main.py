@@ -4,6 +4,7 @@ from parser.Stack import Stack
 from parser.Terminals import Terminals
 from parser.Buffer import Buffer
 from parser.symbolTable import SymbolTable
+from parser.FileHandler import FileHandler
 
 # Requirements
 # Parsing table, Terminals, Buffer for the input, Stack, Definition of the rules
@@ -49,6 +50,13 @@ class parser:
         self.Buffer.calcBufferLoads(self.tokenList)
         self.firstBufferLoad()
         
+        #get the output file ready
+        self.ResFileHandler = FileHandler("results/ASMCompiledFile.txt")
+        
+        #get the literalPool file ready
+        self.PLTFileHandler = FileHandler("results/PoolLiteral.plt")
+        
+        
         self.loop()
 
     def loop(self):
@@ -85,9 +93,14 @@ class parser:
                     self.nonTerminalSubsuitution(parsingRule)
                 
             else:
-                 #We check if it the top of the stacj reads a semantic symbol
+                 #We check if it the top of the stack reads a semantic symbol
                 if currentStackElement[0] == '#':
                         match currentStackElement:
+                            
+                            # ===================================
+                            # SEMANTIC SYMBOLS
+                            # ===================================
+                            
                             case "#crearTSG":
                                 print("=============\n      Creating Global Symbol table ...\n=============")
                                 self.GlobalSymbolTable = SymbolTable()
@@ -195,13 +208,62 @@ class parser:
                                 else:
                                     print("[ERROR]: Constant declared outside of a constant section \n")
                             
+                            case "#var4":
+                                if self.GlobalSymbolTable.inVarSect == True:
+                                    self.GlobalSymbolTable.directModify("value", currentBElement.get("lexema"))
+                                    print(f"[CTXT]: Variable \"{self.GlobalSymbolTable.currIdentifier}\" Modified In the ST \n")
+                                    self.GlobalSymbolTable.display()
+                                    self.Stack.pop()
+                                else:
+                                    print("[ERROR]: Variable declared outside of a constant section \n")
+                            
+                            case "#exp1":
+                                if (self.GlobalSymbolTable.inFunction == False):
+                                    #print("[ERROR]: Expresión declarada fuera de una rutina \n")
+                                    #break
+                                    self.Stack.pop()
+                                else:
+                                    self.Stack.pop()
+                            
+                            case "#checkExist":
+                                if (self.GlobalSymbolTable.contains(currentBElement.get("lexema"))):
+                                    self.Stack.pop()
+                                else:
+                                    print(f"[ERROR]: Identificador inválido - {currentBElement.get("lexema")} no se encuentra declarado dentro del progrma. \n")
+                                    break
+                                
                             # References the type in a temporary variable so that it can be loaded later 
                             case "#type1":
                                 self.GlobalSymbolTable.typeTemp = currentBElement.get("familia")
                                 self.Stack.pop()
-                                    
+                                
+                            # ===================================
+                            # CODE GENERATION SYMBOLS
+                            # ===================================
+                            
+                            case "#genOF":
+                                self.ResFileHandler.open()
+                                self.Stack.pop()
+
+                            case "#slice1":
+                                self.ResFileHandler.write(f"{self.ResFileHandler.prop1}")
+                                self.Stack.pop()
+                                
+                            case "#genPLT":
+                                self.PLTFileHandler.open()
+                                self.Stack.pop()
+                                
+                            case "#closeOF":
+                                self.ResFileHandler.close()
+                                self.Stack.pop()
+                                
+                            case "#closePLT":
+                                self.PLTFileHandler.close()
+                                self.Stack.pop()
+                            
                             case _: # basically this is default
                                 print("\n [WARNING]: Semantic Symbol NOT recognized \n")
+                                break
                 else:
                     #if top of the stack contains a terminal, compare with the first element in the buffer
                     if currentBElement.get("familia") == currentStackElement:

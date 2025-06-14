@@ -3,7 +3,7 @@ class Rules:
     # Éstas son llamadas por el parser, pero son obviadas por el parsing table.
     def __init__(self):
         self.rules = {
-            0: ['#crearTSG', 'WORLDNAME', '<id>', 'COLON', '<programa>', '#eliminarTSG'],
+            0: ['#genOF', '#genPLT', '#slice1', '#crearTSG', 'WORLDNAME', '<id>', 'COLON', '<programa>', '#eliminarTSG', '#closePLT', '#closeOF'],
             1: ['IDENTIFIER', '<acceso>'],
             2: ['<seccion_de_constantes>', '<seccion_de_tipos>', '<seccion_de_variables>', '<seccion_de_prototipos>', '<seccion_de_rutinas>', '<punto_entrada_del_programa>', 'WORLDSAVE'],
             3: ['#const1', 'BEDROCK', '<constantes>', '#const2'],
@@ -19,7 +19,7 @@ class Rules:
             13: [],
             14: ['<variable>', '<variables>'],
             15: [],
-            16: ['#type1', '<tipo>', '#var3', '<id>', 'EQUAL', '<literal>'],
+            16: ['#type1', '<tipo>', '#var3', '<id>', 'EQUAL', '#var4', '<literal>'],
             17: ['RECIPE', '<prototipos>'],
             18: [],
             19: ['<prototipo>', '<prototipos>'],
@@ -98,7 +98,7 @@ class Rules:
             92: ['MULTIPLY_EQUAL'],
             93: ['DIVIDE_EQUAL'],
             94: ['MODULE_EQUAL'],
-            95: ['<or>', 'SEMICOLON'],
+            95: ['#exp1', '<or>', 'SEMICOLON'],
             96: ['<xor>', '<or_logico>'],
             97: ['OR', '<xor>', '<or_logico>'],
             98: [],
@@ -141,8 +141,8 @@ class Rules:
             135: ['FLOAT_MOD', '<factor>', '<sub_termino>'],
             136: [],
             137: ['<op_unaria>', '<sub_factor>'],
-            138: ['<literal>'],
-            139: ['<id>'],
+            138: ['#type1','<literal>'],
+            139: ['#checkExist','<id>'],
             140: ['OPENPARENTHESIS', '<expresion>', 'CLOSEPARENTHESIS'],
             141: ['ISENGRAVED'],
             142: ['ISINSCRIBED'],
