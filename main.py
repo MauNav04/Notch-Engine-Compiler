@@ -18,7 +18,16 @@ Mauro Navarro Obando
 Compilador para archivos Notch Engine [.ne]
 ==============================================
 '''
+'''
+Instrucciones:
+-Inicializa
+-Indica el nombre de la prueba a correr
+-Indica 5 para escanear
+-Indica 6 para parsear
+-Los resusltados se despliegan en la carpeta results
 
+
+'''
 
 cli_banner = '''
 Comandos:
