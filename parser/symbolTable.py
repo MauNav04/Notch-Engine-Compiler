@@ -19,9 +19,9 @@ class SymbolTable:
     def insert(self, lexema, category):
         match category:
             case 'C':
-                self._table[lexema] = {"name":lexema, "category":category, "type":None, "value":None}
+                self._table[lexema] = {"idName":lexema, "category":category, "type":None, "value":None}
             case 'V':
-                self._table[lexema] = {"name":lexema, "category":category, "type":None, "value":None}
+                self._table[lexema] = {"idName":lexema, "category":category, "type":None, "value":None}
             case _:
                 print("\n [WARNING]: Category NOT recognized \n")
             

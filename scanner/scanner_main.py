@@ -36,7 +36,7 @@ class scanner:
 
         # Error management
         except FileNotFoundError:
-            print("There was an error opening the file, please try again")
+            print("El archivo especificado no existe. Ingrese el nombre de un archivo existente.")
         except PermissionError:
             print("Permission denied.")
         except IOError as e:

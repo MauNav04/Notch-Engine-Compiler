@@ -51,7 +51,7 @@ class parser:
         self.firstBufferLoad()
         
         #get the output file ready
-        self.ResFileHandler = FileHandler("results/ASMCompiledFile.txt")
+        self.ResFileHandler = FileHandler("results/ASMCompiledFile.asm")
         
         #get the literalPool file ready
         self.PLTFileHandler = FileHandler("results/PoolLiteral.plt")
@@ -142,8 +142,6 @@ class parser:
                                 self.GlobalSymbolTable.destroyTb()
                                 print("The Global Symbol Table has been deleted")
                                 self.Stack.pop()
-                                if self.Stack.size() == 0:
-                                    print("\n ! The input has been parsed succesfully !")
                             
                             # Marks the beggining of a Constant section        
                             case "#const1":
@@ -217,14 +215,6 @@ class parser:
                                 else:
                                     print("[ERROR]: Variable declared outside of a constant section \n")
                             
-                            case "#exp1":
-                                if (self.GlobalSymbolTable.inFunction == False):
-                                    #print("[ERROR]: Expresión declarada fuera de una rutina \n")
-                                    #break
-                                    self.Stack.pop()
-                                else:
-                                    self.Stack.pop()
-                            
                             case "#checkExist":
                                 if (self.GlobalSymbolTable.contains(currentBElement.get("lexema"))):
                                     self.Stack.pop()
@@ -249,6 +239,14 @@ class parser:
                                 self.ResFileHandler.write(f"{self.ResFileHandler.prop1}")
                                 self.Stack.pop()
                                 
+                            case "#slice2":
+                                self.ResFileHandler.write(f"{self.ResFileHandler.prop2}")
+                                self.Stack.pop()
+                                
+                            case "#slice3":
+                                self.ResFileHandler.write(f"{self.ResFileHandler.prop3}")
+                                self.Stack.pop()
+                                
                             case "#genPLT":
                                 self.PLTFileHandler.open()
                                 self.Stack.pop()
@@ -256,9 +254,53 @@ class parser:
                             case "#closeOF":
                                 self.ResFileHandler.close()
                                 self.Stack.pop()
+                                if self.Stack.size() == 0:
+                                    print("\n ! The input has been parsed succesfully !")
                                 
                             case "#closePLT":
                                 self.PLTFileHandler.close()
+                                self.Stack.pop()
+                                
+                            case "#cgConst":
+                                if self.GlobalSymbolTable.contains(self.GlobalSymbolTable.currIdentifier):
+                                    constData = self.GlobalSymbolTable.getData(self.GlobalSymbolTable.currIdentifier)
+                                    translation = ""
+                                    match constData["type"]:
+                                        case "STACK":
+                                            translation = f"{constData["idName"]} DW {constData["value"]}\n"
+                                            self.ResFileHandler.write(translation)
+                                        case "TORCH":
+                                            translation = f"{constData["idName"]} DB {constData["value"]}\n"
+                                            self.ResFileHandler.write(translation)
+                                        case "RUNE":
+                                            translation = f"{constData["idName"]} DB {constData["value"]}\n"
+                                            self.ResFileHandler.write(translation)
+                                        case "SPIDER":
+                                            translation = f"DB {constData["value"]}\n"
+                                            self.PLTFileHandler.write(translation)
+                                        case _:
+                                            print("caso base")
+                                self.Stack.pop()
+                                
+                            case "#cgVar":
+                                if self.GlobalSymbolTable.contains(self.GlobalSymbolTable.currIdentifier):
+                                    constData = self.GlobalSymbolTable.getData(self.GlobalSymbolTable.currIdentifier)
+                                    translation = ""
+                                    match constData["type"]:
+                                        case "STACK":
+                                            translation = f"{constData["idName"]} DW {constData["value"]}\n"
+                                            self.ResFileHandler.write(translation)
+                                        case "TORCH":
+                                            translation = f"{constData["idName"]} DB {constData["value"]}\n"
+                                            self.ResFileHandler.write(translation)
+                                        case "RUNE":
+                                            translation = f"{constData["idName"]} DB {constData["value"]}\n"
+                                            self.ResFileHandler.write(translation)
+                                        case "SPIDER":
+                                            translation = f"DB {constData["value"]}\n"
+                                            self.PLTFileHandler.write(translation)
+                                        case _:
+                                            print("caso base")
                                 self.Stack.pop()
                             
                             case _: # basically this is default
